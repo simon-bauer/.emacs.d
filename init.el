@@ -6,3 +6,6 @@
    '("melpa" . "http://melpa.org/packages/")
    t)
   (package-initialize))
+
+;; org mode
+(setq org-startup-indented t)
