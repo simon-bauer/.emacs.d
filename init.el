@@ -10,6 +10,7 @@
 ;; packages:
 ;; - better-defaults
 ;; - inf-ruby
+;; - idea-darkula-theme
 
 ;; org mode
 (setq org-startup-indented t)
@@ -22,3 +23,5 @@
 
 ;; Ctrl-x,c,v - cut, copy, paste
 (cua-mode t)
+
+(load-theme 'idea-darkula t)
