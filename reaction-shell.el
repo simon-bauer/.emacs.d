@@ -17,7 +17,7 @@
     (puthash :current-output-hook-action (lambda ()) shell-hash)
     (puthash shell-name-string shell-hash reaction-shell-registry)))
 
-(defun queue-reaction-shell-cmd (shell-name-string shell-cmd-string reaction-function)
+(defun reaction-shell-queue-cmd (shell-name-string shell-cmd-string reaction-function)
   "The pair of shell-cmd and reaction-function is queued for the given shell.\
 The shell-cmd is started as soon as the existing cmd pairs in the queue are\
 finished. The reaction-function is invoced as soon as the corresponding\
@@ -28,7 +28,7 @@ If the given shell is not running it is started and initialized."
         (shell buffer-name)
         (unless (gethash :initialized (gethash shell-name-string reaction-shell-registry))
           (reaction-shell-queue-cmd-pairs-internal shell-name-string
-           (mapcar (lambda (cmd-string) (cons cmd-string (lambda ()) ))
+           (mapcar (lambda (cmd-string) (cons cmd-string 'ignore ))
                    (gethash :init-cmd-string-list (gethash shell-name-string reaction-shell-registry))))
           (puthash :initialized t (gethash shell-name-string reaction-shell-registry)))
         (reaction-shell-queue-cmd-pairs-internal
