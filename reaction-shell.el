@@ -89,9 +89,11 @@ If the given shell is not running it is started and initialized."
 (defun reaction-shell-buffer-name (shell-name-string)
   (concat "*" shell-name-string "*"))
 
-(defun reaction-shell-queue-cmd-pairs-internal (shell-name-string list-cmd-pairs)
+(defun reaction-shell-queue-cmd-pairs-internal (shell-name-string cmd-pair-list)
   (with-mutex (gethash :mutex (gethash shell-name-string reaction-shell-registry))
-    ))
+    (puthash :queue 
+             (append (gethash :queue (gethash shell-name-string reaction-shell-registry)) cmd-pair-list)
+             (gethash shell-name-string reaction-shell-registry))))
 
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
