@@ -3,6 +3,8 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;; external interface
 
+(provide 'reaction-shell)
+
 (defun make-reaction-shell (shell-name-string init-cmd-string-list)
   (interactive)
   (kill-reaction-shell-buffer-if-exist shell-name-string)

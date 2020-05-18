@@ -192,7 +192,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smartparens yasnippet whole-line-or-region which-key wgrep-ag use-package swiper smooth-scrolling pkg-info pfuture origami magit hydra ht ggtags f expand-region clang-format auto-complete ag ace-window))))
+    (buttercup smartparens yasnippet whole-line-or-region which-key wgrep-ag use-package swiper smooth-scrolling pkg-info pfuture origami magit hydra ht ggtags f expand-region clang-format auto-complete ag ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
