@@ -39,6 +39,15 @@
     (before-each
       (spy-on 'rs-process-next)
       (rs-init "test-shell" ()))
-    (it "calls process next cmd pair when queue not empty and shell not busy"
+    (it "does not call process next when queue empty"
       (rs-trigger "test-shell")
-      (expect 'rs-process-next :not :to-have-been-called))))
+      (expect 'rs-process-next :not :to-have-been-called))
+    (it "does not call process next when shell busy"
+      (puthash :queue '(("ls" . 'ignore)) (gethash "test-shell" rs-registry))
+      (puthash :shell-busy t (gethash "test-shell" rs-registry))
+      (rs-trigger "test-shell")
+      (expect 'rs-process-next :not :to-have-been-called))
+    (it "does call next process when when queue not empty and shell not busy"
+      (puthash :queue '(("ls" . 'ignore)) (gethash "test-shell" rs-registry))
+      (rs-trigger "test-shell")
+      (expect 'rs-process-next :to-have-been-called))))
