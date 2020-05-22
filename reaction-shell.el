@@ -26,11 +26,11 @@ If the given shell is not running it is started and initialized."
   (interactive)
   (let ((buffer-name (rs-buffer-name shell-name)))
         (shell buffer-name)
-        (unless (gethash :initialized (gethash shell-name rs-registry))
+        (unless (rs-get shell-name :initialized)
           (rs-cmd-internal shell-name
-           (mapcar (lambda (cmd-string) (cons cmd-string 'ignore ))
-                   (gethash :init-cmd-list (gethash shell-name rs-registry))))
-          (puthash :initialized t (gethash shell-name rs-registry)))
+                           (mapcar (lambda (cmd-string) (cons cmd-string 'ignore ))
+                                   (rs-get shell-name :init-cmd-list)))
+          (rs-set shell-name :initialized t))
         (rs-cmd-internal
          shell-name
          (list (cons shell-cmd callback)))))
@@ -90,20 +90,30 @@ If the given shell is not running it is started and initialized."
   (concat "*" shell-name "*"))
 
 (defun rs-cmd-internal (shell-name cmd-pair-list)
-  (with-mutex (gethash :mutex (gethash shell-name rs-registry))
-    (puthash :queue 
-             (append (gethash :queue (gethash shell-name rs-registry)) cmd-pair-list)
-             (gethash shell-name rs-registry)))
+  (with-mutex (rs-get shell-name :mutex)
+    (rs-mod shell-name :queue (lambda (old-queue) (append old-queue cmd-pair-list))))
   (rs-trigger shell-name))
 
 (defun rs-trigger (shell-name)
-  (let ((queue-empty (not (gethash :queue (gethash shell-name rs-registry))))
-        (shell-busy (gethash :shell-busy (gethash shell-name rs-registry))))
+  (let ((queue-empty (not (rs-get shell-name :queue)))
+        (shell-busy (rs-get shell-name :shell-busy)))
     (when (and (not queue-empty) (not shell-busy))
       (rs-process-next shell-name))))
 
 (defun rs-process-next (shell-name)
-  )
+  (with-mutex (rs-get shell-name :mutex)
+    (rs-mod shell-name :queue 'cdr)
+    (rs-set shell-name :shell-busy t)))
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
 (setq rs-registry (make-hash-table :test 'equal))
+
+;; access rs-registry
+(defun rs-get (shell-name key)
+  (gethash key (gethash shell-name rs-registry)))
+
+(defun rs-set (shell-name key value)
+  (puthash key value (gethash shell-name rs-registry)))
+
+(defun rs-mod (shell-name key func)
+  (rs-set shell-name key (funcall func (rs-get shell-name :queue))))
