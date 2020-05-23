@@ -3,8 +3,6 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;; external interface
 
-(provide 'reaction-shell)
-
 (defun rs-init (shell-name init-cmd-list)
   (interactive)
   (rs-kill-buffer shell-name)
@@ -117,3 +115,6 @@ If the given shell is not running it is started and initialized."
 
 (defun rs-mod (shell-name key func)
   (rs-set shell-name key (funcall func (rs-get shell-name :queue))))
+
+
+(provide 'reaction-shell)
