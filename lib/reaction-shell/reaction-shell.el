@@ -34,44 +34,6 @@ If the given shell is not running it is started and initialized."
          shell-name
          (list (cons shell-cmd callback)))))
 
-;; internal mechanism:
-;; - each shell-command is appended the insertion of an end marker
-;; - before each shell-command the action-hook of the buffer is set to the callback
-;; - before an reaction function the actino-hook is set to an empty function
-;; - after an reaction function a cmd-pair-finished trigger is activated
-;; - changes on state :queue/:shell-busy must be protected by mutex
- 
-;; - states:
-;;          |
-;;          | cmd-pair is finished
-;;          v
-;;   - queue empty, shell not busy
-;;          |
-;;          | cmd-pair is queued
-;;          v
-;;   - queue has entry, shell not busy
-;;          |
-;;          | cmd-pair is taken from queue and given to shell
-;;          v
-;;   - queue empty, shell busy
-;;          |
-;;          | cmd-pair is queued
-;;          v 
-;;   - queue has entry, shell busy
-;;          |
-;;          | cmd-pair is finished
-;;          v
-;;   - queue has entry, shell not busy
-;;          |
-;;          | cmd-pair is taken from queue and given to shell
-;;          v
-;;   - queue empty, shell busy
-;;          |
-;; - main trigger:
-;;   - cmd-pair-queued
-;;   - cmd-pair-finished
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; internal functions and data

@@ -71,4 +71,13 @@
       (expect (rs-get "test-shell" :current-cmd) :to-equal "ls"))
     (it "triggers process current"
       (rs-process-next "test-shell")
-      (expect 'rs-process-current :to-have-been-called))))
+      (expect 'rs-process-current :to-have-been-called)))
+
+  (describe "rs-process-current"
+    (it "adds output filter function to comint output filter of shell")
+    (it "inserts cmd and end marker in shell"))
+
+  (describe "rs-output-filter"
+    (it "sends input to tmp buffer")
+    (it "triggers callback if end marker is found in tmp buffer")
+    (it "cleans up after callback by removing itself from comint output filter of shell, deleting current-callback and current-cmd, setting shell to non busy and sending rs-trigger")))
