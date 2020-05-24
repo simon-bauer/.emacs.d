@@ -95,13 +95,9 @@
 (use-package buttercup
   :ensure t)
 
-  
-;; mr mode
-;(load "~/.emacs.d/mr.el")
-;(mr-mode)
-;(mr/change-to-last-recent-wasp-without-shell-restart)
-;(mr/startup-shells)
-
+;; work specific configuration
+(when (file-exists-p "~/.emacs.d/work/init.el")
+  (load "~/.emacs.d/work/init.el"))
 
 
 ;; choose a dark theme
