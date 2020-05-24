@@ -103,9 +103,11 @@
 
 ;; choose a dark theme
 (load-theme 'tango-dark t)
-;; font type and size
-;(set-face-attribute 'default nil :font "Consolas-10" )
-;(set-frame-font "Consolas-10" nil t)
+
+(when (string-equal system-type "windows-nt")
+  ;; font type and size
+  (set-face-attribute 'default nil :font "Consolas-10" )
+  (set-frame-font "Consolas-10" nil t))
 
 ;; suppress welcome buffer, toolbar and scroolbar
 (setq inhibit-splash-screen t)
