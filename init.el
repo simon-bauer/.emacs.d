@@ -92,6 +92,9 @@
   ;; delete whole line if no region selected
   (whole-line-or-region-global-mode))
 
+(use-package buttercup
+  :ensure t)
+
   
 ;; mr mode
 ;(load "~/.emacs.d/mr.el")
