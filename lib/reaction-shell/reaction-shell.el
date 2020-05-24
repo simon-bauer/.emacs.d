@@ -12,7 +12,8 @@
     (puthash :mutex (make-mutex) shell-hash)
     (puthash :queue () shell-hash)
     (puthash :shell-busy nil shell-hash)
-    (puthash :current-output-hook-action 'ignore shell-hash)
+    (puthash :current-callback 'ignore shell-hash)
+    (puthash :current-cmd "" shell-hash)
     (puthash shell-name shell-hash rs-registry)))
 
 (defun rs-cmd (shell-name shell-cmd callback)
@@ -100,8 +101,16 @@ If the given shell is not running it is started and initialized."
 
 (defun rs-process-next (shell-name)
   (with-mutex (rs-get shell-name :mutex)
-    (rs-mod shell-name :queue 'cdr)
-    (rs-set shell-name :shell-busy t)))
+    (let* ((cmd-callback-pair (car (rs-get shell-name :queue)))
+           (cmd (car cmd-callback-pair))
+           (callback (cdr cmd-callback-pair)))
+      (rs-set shell-name :current-callback callback)
+      (rs-set shell-name :current-cmd cmd)
+      (rs-mod shell-name :queue 'cdr)
+      (rs-set shell-name :shell-busy t)))
+  (rs-process-current shell-name))
+
+(defun rs-process-current (shell-name))
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
 (setq rs-registry (make-hash-table :test 'equal))

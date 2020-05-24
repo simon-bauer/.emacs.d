@@ -156,6 +156,8 @@
 ;; switch between windows
 (windmove-default-keybindings)
 
+;; highlight matching paren
+(show-paren-mode 1)
 
 ;; % paren matching
 (global-set-key "%" 'match-paren)
