@@ -23,16 +23,19 @@ finished. The callback is invoced as soon as the corresponding
 shell-cmd is finished.
 If the given shell is not running it is started and initialized."
   (interactive)
-  (let ((buffer-name (rs-buffer-name shell-name)))
-        (shell buffer-name)
-        (unless (rs-get shell-name :initialized)
-          (rs-cmd-internal shell-name
-                           (mapcar (lambda (cmd-string) (cons cmd-string 'ignore ))
-                                   (rs-get shell-name :init-cmd-list)))
+  (save-current-buffer
+    (let ((buffer-name (rs-buffer-name shell-name)))
+      (if (get-buffer buffer-name)
+          (set-buffer buffer-name)
+        (shell buffer-name))
+      (unless (rs-get shell-name :initialized)
+        (rs-cmd-internal shell-name
+                         (mapcar (lambda (cmd-string) (cons cmd-string 'ignore ))
+                                 (rs-get shell-name :init-cmd-list)))
           (rs-set shell-name :initialized t))
-        (rs-cmd-internal
-         shell-name
-         (list (cons shell-cmd callback)))))
+      (rs-cmd-internal
+       shell-name
+       (list (cons shell-cmd callback))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,7 +76,6 @@ If the given shell is not running it is started and initialized."
   (rs-process-current shell-name))
 
 (defun rs-process-current (shell-name)
-  (shell (rs-buffer-name shell-name))
   (add-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t t))
 
 (defun rs-output-filter (shell-name string)

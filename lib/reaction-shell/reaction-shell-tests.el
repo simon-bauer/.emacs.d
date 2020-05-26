@@ -75,13 +75,13 @@
 
   (describe "rs-process-current"
     (it "adds output filter to comint output filter of shell"
-      (rs-process-current "test-shell")
       (shell (rs-buffer-name "test-shell"))
+      (rs-process-current "test-shell")
       (let ((lambda-body (car (last (car (last comint-output-filter-functions))))))
         (expect lambda-body :to-equal '(rs-output-filter shell-name string))))
     (it "inserts cmd and end marker in shell"))
 
   (describe "rs-output-filter"
-    (it "sends input to tmp buffer")
+    (it "sends input string to tmp buffer")
     (it "triggers callback if end marker is found in tmp buffer")
-    (it "cleans up after callback by removing itself from comint output filter of shell, deleting current-callback and current-cmd, setting shell to non busy and sending rs-trigger")))
+    (it "cleans up after callback by removing comint output filter of shell, deleting tmp buffer, deleting current-callback and current-cmd, setting shell to non busy and sending rs-trigger")))
