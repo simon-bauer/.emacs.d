@@ -74,7 +74,11 @@
       (expect 'rs-process-current :to-have-been-called)))
 
   (describe "rs-process-current"
-    (it "adds output filter function to comint output filter of shell")
+    (it "adds output filter to comint output filter of shell"
+      (rs-process-current "test-shell")
+      (shell (rs-buffer-name "test-shell"))
+      (let ((lambda-body (car (last (car (last comint-output-filter-functions))))))
+        (expect lambda-body :to-equal '(rs-output-filter shell-name string))))
     (it "inserts cmd and end marker in shell"))
 
   (describe "rs-output-filter"

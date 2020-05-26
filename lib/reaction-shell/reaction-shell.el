@@ -72,7 +72,12 @@ If the given shell is not running it is started and initialized."
       (rs-set shell-name :shell-busy t)))
   (rs-process-current shell-name))
 
-(defun rs-process-current (shell-name))
+(defun rs-process-current (shell-name)
+  (shell (rs-buffer-name shell-name))
+  (add-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t t))
+
+(defun rs-output-filter (shell-name string)
+  )
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
 (setq rs-registry (make-hash-table :test 'equal))
