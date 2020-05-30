@@ -95,6 +95,10 @@
 (use-package buttercup
   :ensure t)
 
+;; org
+(setq org-startup-indented t)
+(setq org-hide-leading-stars t)
+
 ;; work specific configuration
 (when (file-exists-p "~/.emacs.d/work/init.el")
   (load "~/.emacs.d/work/init.el"))
