@@ -76,7 +76,13 @@ If the given shell is not running it is started and initialized."
   (rs-process-current shell-name))
 
 (defun rs-process-current (shell-name)
-  (add-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t t))
+  (add-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t t)
+  (comint-kill-input)
+  (goto-char (point-max))
+  (insert (rs-get shell-name :current-cmd))
+  (comint-send-input)
+  (insert "---CMD_END_MARKER---")
+  (comint-send-input))
 
 (defun rs-output-filter (shell-name string)
   )

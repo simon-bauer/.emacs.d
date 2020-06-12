@@ -75,11 +75,14 @@
 
   (describe "rs-process-current"
     (it "adds output filter to comint output filter of shell"
+      (rs-init "test-shell" ())
       (shell (rs-buffer-name "test-shell"))
       (rs-process-current "test-shell")
       (let ((lambda-body (car (last (car (last comint-output-filter-functions))))))
         (expect lambda-body :to-equal '(rs-output-filter shell-name string))))
-    (it "inserts cmd and end marker in shell"))
+    (it "inserts cmd and end marker in shell"
+      (rs-init "test-shell" ())
+      (rs-cmd "test-shell" "lslsls" 'ignore)))
 
   (describe "rs-output-filter"
     (it "sends input string to tmp buffer")
