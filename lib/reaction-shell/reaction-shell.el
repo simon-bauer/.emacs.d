@@ -53,6 +53,9 @@ If the given shell is not running it is started and initialized."
 (defun rs-buffer-name (shell-name)
   (concat "*" shell-name "*"))
 
+(defun rs-additional-output-buffer-name (shell-name)
+  (concat "*" shell-name "-additional-output" "*"))
+
 (defun rs-cmd-internal (shell-name cmd-pair-list)
   (with-mutex (rs-get shell-name :mutex)
     (rs-mod shell-name :queue (lambda (old-queue) (append old-queue cmd-pair-list))))
@@ -85,7 +88,11 @@ If the given shell is not running it is started and initialized."
   (comint-send-input))
 
 (defun rs-output-filter (shell-name string)
-  )
+  (with-current-buffer (get-buffer-create (rs-additional-output-buffer-name shell-name))
+    (insert string)
+    (when
+        (string-match-p "---CMD_END_MARKER---.*$" (buffer-string))
+      (funcall (rs-get shell-name :current-callback)))))
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
 (setq rs-registry (make-hash-table :test 'equal))
