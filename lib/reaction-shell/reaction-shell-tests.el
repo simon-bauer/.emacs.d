@@ -82,9 +82,5 @@
         (expect lambda-body :to-equal '(rs-output-filter shell-name string))))
     (it "inserts cmd and end marker in shell"
       (rs-init "test-shell" ())
-      (rs-cmd "test-shell" "lslsls" 'ignore)))
+      (rs-cmd "test-shell" "lslsls" 'ignore))))
 
-  (describe "rs-output-filter"
-    (it "sends input string to tmp buffer")
-    (it "triggers callback if end marker is found in tmp buffer")
-    (it "cleans up after callback by removing comint output filter of shell, deleting tmp buffer, deleting current-callback and current-cmd, setting shell to non busy and sending rs-trigger")))

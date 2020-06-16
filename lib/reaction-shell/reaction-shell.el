@@ -80,6 +80,8 @@ If the given shell is not running it is started and initialized."
 
 (defun rs-process-current (shell-name)
   (add-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t t)
+  (with-current-buffer (get-buffer-create (rs-additional-output-buffer-name shell-name))
+    (erase-buffer))
   (comint-kill-input)
   (goto-char (point-max))
   (insert (rs-get shell-name :current-cmd))
@@ -92,7 +94,13 @@ If the given shell is not running it is started and initialized."
     (insert string)
     (when
         (string-match-p "---CMD_END_MARKER---.*$" (buffer-string))
-      (funcall (rs-get shell-name :current-callback)))))
+      (funcall (rs-get shell-name :current-callback))
+      (remove-hook 'comint-output-filter-functions (lambda (string) (rs-output-filter shell-name string) ) t)
+      (with-mutex (rs-get shell-name :mutex)
+        (rs-set shell-name :current-cmd "")
+        (rs-set shell-name :current-callback 'ignore)
+        (rs-set shell-name :shell-busy nil)
+        (rs-trigger shell-name)))))
 
 ;; hash-table containing for each shell another hash-table with all shell related variables
 (setq rs-registry (make-hash-table :test 'equal))
