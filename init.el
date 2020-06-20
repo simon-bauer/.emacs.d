@@ -192,6 +192,14 @@
 ;; easier eval-buffer
 (global-set-key (kbd "C-c e") 'eval-buffer)
 
+;; prototyping using an org file/buffer as life configuration
+(find-file "~/.emacs.d/kauri.org")
+
+(require 'org-element)
+
+(with-current-buffer "kauri.org"
+  (org-element-parse-buffer 'headline))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

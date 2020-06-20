@@ -1,0 +1,10 @@
+* Settings
+** Flavourlist
+*** green
+*** blue
+*** yellow
+** Morelist
+*** a
+*** b
+*** c
+
