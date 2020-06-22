@@ -200,6 +200,11 @@
 (with-current-buffer "kauri.org"
   (org-element-parse-buffer 'headline))
 
+(defun kauri-get (key-list)
+  (with-current-buffer "kauri.org"
+    (goto-char (point-min))
+    (org-forward-heading-same-level)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
