@@ -197,13 +197,16 @@
 
 (require 'org-element)
 
-(with-current-buffer "kauri.org"
-  (org-element-parse-buffer 'headline))
+(setq kauri
+      (with-current-buffer "kauri.org"
+        (org-element-parse-buffer 'headline)))
+(caddr kauri)
 
 (defun kauri-get (key-list)
   (with-current-buffer "kauri.org"
+    (outline-show-all)
     (goto-char (point-min))
-    (org-forward-heading-same-level)))
+    (org-forward-heading-same-level 1)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
