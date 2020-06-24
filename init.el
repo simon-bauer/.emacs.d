@@ -68,6 +68,9 @@
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
 
+(use-package dash
+  :ensure t)
+
 
 ;; which key: on the fly docu for key bindings
 (use-package which-key
@@ -197,16 +200,24 @@
 
 (require 'org-element)
 
+;; format: (type properties child1 child2 ...)
 (setq kauri
-      (with-current-buffer "kauri.org"
-        (org-element-parse-buffer 'headline)))
-(caddr kauri)
+      (-drop 2
+             (with-current-buffer "kauri.org"
+               (org-element-parse-buffer 'headline))))
 
-(defun kauri-get (key-list)
-  (with-current-buffer "kauri.org"
-    (outline-show-all)
-    (goto-char (point-min))
-    (org-forward-heading-same-level 1)))
+;; number of entries on current level
+(length kauri)
+
+;; first entry
+(nth 0 kauri)
+
+;; properties of first entry
+(nth 1 (nth 0 kauri))
+
+;; number of childs of first entry
+(length (-drop 2 (nth 0 kauri)))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
