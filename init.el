@@ -201,22 +201,25 @@
 (require 'org-element)
 
 ;; format: (type properties child1 child2 ...)
-(setq kauri
-      (-drop 2
-             (with-current-buffer "kauri.org"
-               (org-element-parse-buffer 'headline))))
 
-;; number of entries on current level
-(length kauri)
+(defun kauri-plist (org-ast)
+  "convert headlines of an org ast to a nested plist"
+  (cond ((eq (car org-ast) 'org-data)
+         (kauri-plist-2 (-drop 2 org-ast)))
+        ((eq (car org-ast) 'headline)
+         (cons
+          (plist-get (cadr org-ast) :title)
+          (kauri-plist-2 (-drop 2 org-ast))))))
 
-;; first entry
-(nth 0 kauri)
+(defun kauri-plist-2 (org-element-list)
+  (if org-element-list
+      (cons (kauri-plist (car org-element-list))
+            (kauri-plist-2 (cdr org-element-list)))
+    nil))
 
-;; properties of first entry
-(nth 1 (nth 0 kauri))
+(kauri-plist (with-current-buffer "kauri.org"
+               (org-element-parse-buffer 'headline)))
 
-;; number of childs of first entry
-(length (-drop 2 (nth 0 kauri)))
 
 
 (custom-set-variables

@@ -1,6 +1,7 @@
 * Settings
 ** Flavourlist
-*** green
+*** spicy
+*** salty
 * Second Settings
 ** Colors
 *** green
