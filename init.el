@@ -205,11 +205,11 @@
 (defun kauri-plist (org-ast)
   "convert headlines of an org ast to a nested plist"
   (cond ((eq (car org-ast) 'org-data)
-         (kauri-plist-2 (-drop 2 org-ast)))
+         (kauri-plist-2 (cddr org-ast)))
         ((eq (car org-ast) 'headline)
          (cons
           (plist-get (cadr org-ast) :title)
-          (kauri-plist-2 (-drop 2 org-ast))))))
+          (kauri-plist-2 (cddr org-ast))))))
 
 (defun kauri-plist-2 (org-element-list)
   (if org-element-list
