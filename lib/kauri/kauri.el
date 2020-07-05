@@ -42,6 +42,7 @@
 
 (defun kauri-config-plist-2 (org-child-list)
   (if org-child-list
-      (cons (kauri-config-plist (car org-child-list))
-            (kauri-config-plist-2 (cdr org-child-list)))
+      (kauri-config-plist (car org-child-list))
+;;      (cons (kauri-config-plist (car org-child-list))
+;;            (kauri-config-plist-2 (cdr org-child-list)))
     nil))
