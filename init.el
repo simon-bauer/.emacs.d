@@ -195,7 +195,8 @@
 ;; easier eval-buffer
 (global-set-key (kbd "C-c e") 'eval-buffer)
 
-
+;;(expand-file-name invocation-name invocation-directory)
+;;(shell-command "dir" "*test-output*")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
