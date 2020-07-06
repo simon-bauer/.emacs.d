@@ -197,6 +197,12 @@
 
 ;;(expand-file-name invocation-name invocation-directory)
 ;;(shell-command "dir" "*test-output*")
+(defun sb-run-all-buttercup-tests ()
+  (interactive)
+  (let* ((emacs-exe (expand-file-name invocation-name invocation-directory))
+         (cmd (concat emacs-exe " -batch")))
+    (shell-command cmd "*buttercup-output*")))
+(global-set-key (kbd "C-c t") 'sb-run-all-buttercup-tests)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
